@@ -6,7 +6,7 @@ This plugin is useful because:
 * By default Dropwizard puts the healthchecks on a different admin port. In production deployments, the admin rest interface should usually not be exposed to the world. Instead we just want to have a simple healthcheck
 * The default healthcheck response is not pingdom compatible. This plugin returns the valid pingdom XML
 
-# How to use:
+# Usage:
 
 ## Include the dropwizard-pingdom plugin as a dependency in your project.
 
