@@ -50,7 +50,7 @@ public class PingdomHealthResource {
                 status.append('\n')
                       .append("HealthCheck Failed: ").append(name).append('\n')
                       .append("Reason: ").append(result.getMessage()).append('\n')
-                      .append("Exception: ").append(result.getError().getMessage())
+                      .append("Exception: ").append(result.getError() != null ? result.getError().getMessage() : null)
                       .append('\n');
             }
         }
