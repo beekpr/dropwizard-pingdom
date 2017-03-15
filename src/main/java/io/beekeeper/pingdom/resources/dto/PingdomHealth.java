@@ -22,8 +22,8 @@ public class PingdomHealth {
     public static String HEALTH_OK = "OK";
 
     /**
-     * The health Status. Use {@link HEALTH_OK} to indicate an OK status. Any
-     * status other than OK will make the check count as down.
+     * The health Status. Use {@link PingdomHealth#HEALTH_OK} to indicate an OK
+     * status. Any status other than OK will make the check count as down.
      */
     @XmlElement
     public String status;
