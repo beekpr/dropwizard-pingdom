@@ -28,7 +28,7 @@ compile 'io.beekeeper:dropwizard-pingdom:1.0.0'
 ## Add the PingdomBundle to your bootstrap
 
 ```java
-bootstrap.addBundle(new PingdomBundle<QRApplicationConfiguration>());
+bootstrap.addBundle(new PingdomBundle<Configuration>());
 ```
 
 
@@ -38,7 +38,7 @@ Thats it!
 By Default the endpoint will be world visible on "/health/pingdom". If you would like to have some protection, you can add a key, so that only requests which provide the key over a query parameter return data. E.g.
 
 ```java
-bootstrap.addBundle(new PingdomBundle<QRApplicationConfiguration>() {
+bootstrap.addBundle(new PingdomBundle<Configuration>() {
     @Override
     public PingdomBundleConfiguration getPingdomBundleConfiguration() {
         PingdomBundleConfiguration configuration = new PingdomBundleConfiguration();
