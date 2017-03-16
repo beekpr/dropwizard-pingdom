@@ -55,6 +55,6 @@ public class PingdomHealthResource {
             }
         }
 
-        return new PingdomHealth(status.length() == 0 ? PingdomHealth.HEALTH_OK : status.toString(), timer.getSnapshot().getMean() * 1000.0d);
+        return new PingdomHealth(status.length() == 0 ? PingdomHealth.HEALTH_OK : status.toString(), timer.getSnapshot().getMean() / 1000000.0d);
     }
 }
