@@ -1,5 +1,6 @@
 package io.beekeeper.pingdom.resources;
 
+import java.util.List;
 import java.util.Map.Entry;
 import java.util.SortedMap;
 
@@ -33,10 +34,16 @@ public class PingdomHealthResource {
 
     @GET
     @Produces(MediaType.TEXT_XML)
-    public PingdomHealth get(@QueryParam("key") String key) {
+    public PingdomHealth get(@QueryParam("key") String key, @QueryParam("severity") List<String> severity) {
         String authKey = configuration.getKey();
         if (authKey != null && !authKey.isEmpty() && !authKey.equals(key)) {
             throw new NotFoundException();
+        }
+
+        if (severity == null || severity.isEmpty()) {
+            for (int i = 0; i < HealthCheckDetails.Severity.VALUES.length; i++) {
+                severity.add(HealthCheckDetails.Severity.VALUES[i]);
+            }
         }
 
         Timer timer = environment.metrics().getTimers().get("io.dropwizard.jetty.MutableServletContextHandler.requests");
@@ -46,12 +53,15 @@ public class PingdomHealthResource {
         for (Entry<String, Result> healthCheck : healthChecks.entrySet()) {
             Result result = healthCheck.getValue();
             if (!result.isHealthy()) {
-                String name = healthCheck.getKey();
-                status.append('\n')
-                      .append("HealthCheck Failed: ").append(name).append('\n')
-                      .append("Reason: ").append(result.getMessage()).append('\n')
-                      .append("Exception: ").append(result.getError() != null ? result.getError().getMessage() : null)
-                      .append('\n');
+                Object result_severity = result.getDetails().get("io.beekeeper.pingdom.severity");
+                if (result_severity == null || severity.contains(result_severity)) {
+                    String name = healthCheck.getKey();
+                    status.append('\n')
+                            .append("HealthCheck Failed: ").append(name).append('\n')
+                            .append("Reason: ").append(result.getMessage()).append('\n')
+                            .append("Exception: ").append(result.getError() != null ? result.getError().getMessage() : null)
+                            .append('\n');
+                }
             }
         }
 
