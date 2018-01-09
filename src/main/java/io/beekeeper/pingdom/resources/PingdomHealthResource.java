@@ -46,7 +46,8 @@ public class PingdomHealthResource {
             }
         }
 
-        Timer timer = environment.metrics().getTimers().get("io.dropwizard.jetty.MutableServletContextHandler.requests");
+        Timer timer = environment.metrics().timer("io.dropwizard.jetty.MutableServletContextHandler.requests");
+
         SortedMap<String, Result> healthChecks = environment.healthChecks().runHealthChecks();
         StringBuilder status = new StringBuilder();
 
