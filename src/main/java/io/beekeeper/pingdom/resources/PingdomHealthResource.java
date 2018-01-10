@@ -1,5 +1,7 @@
 package io.beekeeper.pingdom.resources;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.SortedMap;
@@ -41,9 +43,7 @@ public class PingdomHealthResource {
         }
 
         if (severity == null || severity.isEmpty()) {
-            for (int i = 0; i < HealthCheckDetails.Severity.VALUES.length; i++) {
-                severity.add(HealthCheckDetails.Severity.VALUES[i]);
-            }
+            severity = new ArrayList(Arrays.asList(HealthCheckDetails.Severity.VALUES));
         }
 
         Timer timer = environment.metrics().timer("io.dropwizard.jetty.MutableServletContextHandler.requests");
@@ -54,7 +54,7 @@ public class PingdomHealthResource {
         for (Entry<String, Result> healthCheck : healthChecks.entrySet()) {
             Result result = healthCheck.getValue();
             if (!result.isHealthy()) {
-                Object result_severity = result.getDetails().get("io.beekeeper.pingdom.severity");
+                Object result_severity = result.getDetails() != null ? result.getDetails().get(HealthCheckDetails.Severity.KEY) : null;
                 if (result_severity == null || severity.contains(result_severity)) {
                     String name = healthCheck.getKey();
                     status.append('\n')
