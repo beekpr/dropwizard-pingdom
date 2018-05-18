@@ -36,7 +36,7 @@ public class PingdomHealthResource {
 
     @GET
     @Produces(MediaType.TEXT_XML)
-    public PingdomHealth get(@QueryParam("key") String key, @QueryParam("severity") List<String> severity) {
+    public PingdomHealth get(@QueryParam("key") String key, @QueryParam("severity") List<String> severity, @QueryParam("category") List<String> categories) {
         String authKey = configuration.getKey();
         if (authKey != null && !authKey.isEmpty() && !authKey.equals(key)) {
             throw new NotFoundException();
@@ -46,6 +46,22 @@ public class PingdomHealthResource {
             severity = new ArrayList(Arrays.asList(HealthCheckDetails.Severity.VALUES));
         }
 
+        String defaultCategory = configuration.getDefaultCategory();
+
+        boolean filterByCategories = true;
+        boolean categoryFilterSpecified = (categories != null && categories.size() > 0);
+
+        if (!categoryFilterSpecified) {
+            if (defaultCategory != null) {
+                // If we have a default category, and no category is given as a query parameter, we return all checks of the default category.
+                categories = Arrays.asList(defaultCategory);
+            }
+            else {
+                // If no default category is set, and no category is given as a query parameter, we return all categories.
+                filterByCategories = false;
+            }
+        }
+
         Timer timer = environment.metrics().timer("io.dropwizard.jetty.MutableServletContextHandler.requests");
 
         SortedMap<String, Result> healthChecks = environment.healthChecks().runHealthChecks();
@@ -53,19 +69,40 @@ public class PingdomHealthResource {
 
         for (Entry<String, Result> healthCheck : healthChecks.entrySet()) {
             Result result = healthCheck.getValue();
-            if (!result.isHealthy()) {
-                Object result_severity = result.getDetails() != null ? result.getDetails().get(HealthCheckDetails.Severity.KEY) : null;
-                if (result_severity == null || severity.contains(result_severity)) {
-                    String name = healthCheck.getKey();
-                    status.append('\n')
-                            .append("HealthCheck Failed: ").append(name).append('\n')
-                            .append("Reason: ").append(result.getMessage()).append('\n')
-                            .append("Exception: ").append(result.getError() != null ? result.getError().getMessage() : null)
-                            .append('\n');
-                }
+
+            Object resultSeverity = result.getDetails() != null
+                    ? result.getDetails().get(HealthCheckDetails.Severity.KEY)
+                    : null;
+
+            Object resultCategory = result.getDetails() != null
+                    ? result.getDetails().get(HealthCheckDetails.Category.KEY)
+                    : null;
+
+            if (resultCategory == null) {
+                resultCategory = defaultCategory;
+            }
+
+            boolean isUnhealthy = !result.isHealthy();
+
+            boolean severityFilterMatches = (
+                    resultSeverity == null
+                            || severity.contains(resultSeverity));
+
+            boolean categoryFilterMatches = (
+                    !filterByCategories
+                            || resultCategory == null
+                            || categories.contains(resultCategory));
+
+
+            if (isUnhealthy && severityFilterMatches && categoryFilterMatches) {
+                        String name = healthCheck.getKey();
+                        status.append('\n')
+                                .append("HealthCheck Failed: ").append(name).append('\n')
+                                .append("Reason: ").append(result.getMessage()).append('\n')
+                                .append("Exception: ").append(result.getError() != null ? result.getError().getMessage() : null)
+                                .append('\n');
             }
         }
-
         return new PingdomHealth(status.length() == 0 ? PingdomHealth.HEALTH_OK : status.toString(), timer.getSnapshot().getMean() / 1000000.0d);
     }
 }
