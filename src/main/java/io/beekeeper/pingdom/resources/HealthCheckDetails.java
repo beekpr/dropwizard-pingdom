@@ -7,4 +7,8 @@ public class HealthCheckDetails {
         public static final String VALUE_LOW = "low";
         public static final String[] VALUES = {VALUE_HIGH, VALUE_LOW};
     }
+
+    public static class Category {
+        public static final String KEY = Category.class.getName() + ".category";
+    }
 }
