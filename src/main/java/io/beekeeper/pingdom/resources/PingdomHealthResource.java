@@ -104,11 +104,17 @@ public class PingdomHealthResource {
                                 .append("Reason: ").append(result.getMessage()).append('\n')
                                 .append("Exception: ").append(result.getError() != null ? result.getError().getMessage() : null)
                                 .append('\n');
-                        if (log.isWarnEnabled()) {
-                            log.warn(status.toString());
-                        }
             }
         }
-        return new PingdomHealth(status.length() == 0 ? PingdomHealth.HEALTH_OK : status.toString(), timer.getSnapshot().getMean() / 1000000.0d);
+        String statusMessage;
+        if (status.length() == 0) {
+            statusMessage = PingdomHealth.HEALTH_OK;
+        } else {
+            statusMessage = status.toString();
+            if (log.isWarnEnabled()) {
+                log.warn(statusMessage);
+            }
+        }
+        return new PingdomHealth(statusMessage, timer.getSnapshot().getMean() / 1000000.0d);
     }
 }
