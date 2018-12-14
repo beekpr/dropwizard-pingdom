@@ -19,12 +19,15 @@ import com.codahale.metrics.health.HealthCheck.Result;
 import io.beekeeper.pingdom.PingdomBundleConfiguration;
 import io.beekeeper.pingdom.resources.dto.PingdomHealth;
 import io.dropwizard.setup.Environment;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * The Pingdom Healthcheck endpoint resource
  */
 @Path("/health/pingdom")
 public class PingdomHealthResource {
+    private final Logger log = LoggerFactory.getLogger(PingdomHealthResource.class);
 
     private final PingdomBundleConfiguration configuration;
     private final Environment environment;
@@ -103,6 +106,13 @@ public class PingdomHealthResource {
                                 .append('\n');
             }
         }
-        return new PingdomHealth(status.length() == 0 ? PingdomHealth.HEALTH_OK : status.toString(), timer.getSnapshot().getMean() / 1000000.0d);
+        String statusMessage;
+        if (status.length() == 0) {
+            statusMessage = PingdomHealth.HEALTH_OK;
+        } else {
+            statusMessage = status.toString();
+            log.warn(statusMessage);
+        }
+        return new PingdomHealth(statusMessage, timer.getSnapshot().getMean() / 1000000.0d);
     }
 }
