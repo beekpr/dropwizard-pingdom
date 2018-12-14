@@ -104,8 +104,8 @@ public class PingdomHealthResource {
                                 .append("Reason: ").append(result.getMessage()).append('\n')
                                 .append("Exception: ").append(result.getError() != null ? result.getError().getMessage() : null)
                                 .append('\n');
-                        if (log.isInfoEnabled()) {
-                            log.info(status.toString());
+                        if (log.isWarnEnabled()) {
+                            log.warn(status.toString());
                         }
             }
         }
