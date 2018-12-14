@@ -111,9 +111,7 @@ public class PingdomHealthResource {
             statusMessage = PingdomHealth.HEALTH_OK;
         } else {
             statusMessage = status.toString();
-            if (log.isWarnEnabled()) {
-                log.warn(statusMessage);
-            }
+            log.warn(statusMessage);
         }
         return new PingdomHealth(statusMessage, timer.getSnapshot().getMean() / 1000000.0d);
     }
