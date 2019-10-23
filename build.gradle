@@ -7,10 +7,23 @@ plugins {
     id 'maven-publish'
 }
 
+ext {
+    mvnRepoUrl = System.getenv('MVN_S3_URL')
+    mvnRepoAccessKey = System.getenv('MVN_S3_ACCESS_KEY')
+    mvnRepoSecretKey = System.getenv('MVN_S3_SECRET_KEY')
+}
+
 repositories {
     mavenLocal()
     maven {
         url = 'http://repo.maven.apache.org/maven2'
+    }
+    maven {
+        url 's3://beekeeper-internal-repository.s3.eu-central-1.amazonaws.com/maven2/release'
+        credentials(AwsCredentials) {
+            accessKey System.getenv('MVN_S3_INTERNAL_ACCESS_KEY') ?: "${MVN_S3_INTERNAL_ACCESS_KEY}"
+            secretKey System.getenv('MVN_S3_INTERNAL_SECRET_KEY') ?: "${MVN_S3_INTERNAL_SECRET_KEY}"
+        }
     }
 }
 
@@ -38,10 +51,20 @@ task javadocJar(type: Jar) {
 }
 
 publishing {
+    repositories {
+        maven {
+            url rootProject.ext.mvnRepoUrl
+            credentials(AwsCredentials) {
+                accessKey rootProject.ext.mvnRepoAccessKey
+                secretKey rootProject.ext.mvnRepoSecretKey
+            }
+        }
+    }
     publications {
-        maven(MavenPublication) {
-            from(components.java)
-            artifact(javadocJar)
+        mavenJava(MavenPublication) {
+            from components.java
+
+            artifact testSourcesJar
         }
     }
 }
