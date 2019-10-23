@@ -46,7 +46,7 @@ public class PingdomHealthResource {
         }
 
         if (severity == null || severity.isEmpty()) {
-            severity = new ArrayList(Arrays.asList(HealthCheckDetails.Severity.VALUES));
+            severity = Arrays.asList(HealthCheckDetails.Severity.VALUES);
         }
 
         String defaultCategory = configuration.getDefaultCategory();
@@ -111,7 +111,7 @@ public class PingdomHealthResource {
             statusMessage = PingdomHealth.HEALTH_OK;
         } else {
             statusMessage = status.toString();
-            log.warn(statusMessage);
+            log.info(statusMessage);
         }
         return new PingdomHealth(statusMessage, timer.getSnapshot().getMean() / 1000000.0d);
     }
