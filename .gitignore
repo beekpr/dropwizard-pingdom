@@ -4,3 +4,11 @@
 .project
 .classpath
 target
+
+# Gradle
+*.gradle/
+build/
+bin/
+
+# OS
+*.DS_STORE
