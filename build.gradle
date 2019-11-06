@@ -26,8 +26,8 @@ dependencies {
     testCompile 'junit:junit:4.12'
 }
 
-group = 'io.beekeeper'
-version = '2.2.0'
+group = GROUP
+version = VERSION
 description = 'Dropwizard Pingdom'
 sourceCompatibility = '1.8'
 
