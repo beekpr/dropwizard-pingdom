@@ -8,7 +8,6 @@ target
 # Gradle
 *.gradle/
 build/
-gradle/
 bin/
 
 # OS
