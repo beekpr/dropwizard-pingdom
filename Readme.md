@@ -15,14 +15,14 @@ This plugin is useful because:
 <dependency>
   <groupId>io.beekeeper</groupId>
   <artifactId>dropwizard-pingdom</artifactId>
-  <version>1.0.3</version>
+  <version>2.2.1</version>
   <type>pom</type>
 </dependency>
 ```
 
 ### Gradle
 ```
-compile 'io.beekeeper:dropwizard-pingdom:1.0.3'
+compile 'io.beekeeper:dropwizard-pingdom:2.2.1'
 ```
 
 ## Add the PingdomBundle to your bootstrap
