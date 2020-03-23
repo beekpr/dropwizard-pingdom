@@ -30,8 +30,7 @@ public class PingdomBundle<T extends Configuration> implements ConfiguredBundle<
 
         if (configProvider == null) {
             bundleConfig = getPingdomBundleConfiguration();
-        }
-        else {
+        } else {
             bundleConfig = configProvider.apply(configuration);
         }
 

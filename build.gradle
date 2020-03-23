@@ -3,27 +3,30 @@
  */
 
 plugins {
-    id 'java'
+    id 'java-library'
     id 'maven-publish'
+    id 'io.beekeeper.gradle.plugin' version '0.7.17'
 }
 
 ext {
-    mvnRepoUrl = System.getenv('MVN_S3_INTERNAL_URL') ?: "${MVN_S3_INTERNAL_URL}"
     mvnRepoAccessKey = System.getenv('MVN_S3_INTERNAL_ACCESS_KEY') ?: "${MVN_S3_INTERNAL_ACCESS_KEY}"
     mvnRepoSecretKey = System.getenv('MVN_S3_INTERNAL_SECRET_KEY') ?: "${MVN_S3_INTERNAL_SECRET_KEY}"
 }
 
 repositories {
     mavenLocal()
-    maven {
-        url = 'http://repo.maven.apache.org/maven2'
-    }
+    mavenCentral()
 }
 
 dependencies {
-    compile 'io.dropwizard:dropwizard-core:1.1.0'
 
-    testCompile 'junit:junit:4.12'
+    api 'javax.xml.bind:jaxb-api:2.3.1'
+    implementation 'org.glassfish.jaxb:jaxb-runtime:2.3.1'
+
+    implementation "io.dropwizard:dropwizard-core:${dropwizardVersion}"
+
+    testImplementation 'junit:junit:4.12'
+    testImplementation "io.dropwizard:dropwizard-testing:${dropwizardVersion}"
 }
 
 group = GROUP
@@ -39,7 +42,7 @@ task javadocJar(type: Jar) {
 publishing {
     repositories {
         maven {
-            url project.ext.mvnRepoUrl
+            url "s3://beekeeper-internal-repository.s3.eu-central-1.amazonaws.com/maven2/release"
             credentials(AwsCredentials) {
                 accessKey project.ext.mvnRepoAccessKey
                 secretKey project.ext.mvnRepoSecretKey

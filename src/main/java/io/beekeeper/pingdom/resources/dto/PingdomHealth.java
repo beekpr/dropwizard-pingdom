@@ -13,7 +13,10 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement(name = "pingdom_http_custom_check")
 public class PingdomHealth {
 
-    private static DecimalFormat FORMAT = new DecimalFormat("########.###", DecimalFormatSymbols.getInstance(Locale.ENGLISH));
+    private static DecimalFormat FORMAT = new DecimalFormat(
+            "########.###",
+            DecimalFormatSymbols.getInstance(Locale.ENGLISH)
+    );
     private static final double MAX_RESPONSE_TIME = 99999999.999;
 
     /**
@@ -36,7 +39,8 @@ public class PingdomHealth {
     @XmlElement(name = "response_time")
     public String responseTime;
 
-    public PingdomHealth() {}
+    public PingdomHealth() {
+    }
 
     public PingdomHealth(String status, String responseTime) {
         this.status = status;
