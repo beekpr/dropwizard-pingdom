@@ -5,7 +5,7 @@
 plugins {
     id 'java-library'
     id 'maven-publish'
-    id 'io.beekeeper.gradle.plugin' version '0.7.17'
+    id 'io.beekeeper.gradle.plugin' version "${beekeeperPluginVersion}"
 }
 
 ext {
@@ -27,6 +27,7 @@ dependencies {
 
     testImplementation 'junit:junit:4.12'
     testImplementation "io.dropwizard:dropwizard-testing:${dropwizardVersion}"
+    testImplementation "org.assertj:assertj-core:3.21.0"
 }
 
 group = GROUP
