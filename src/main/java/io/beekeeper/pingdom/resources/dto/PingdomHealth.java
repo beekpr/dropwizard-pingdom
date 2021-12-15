@@ -22,7 +22,7 @@ public class PingdomHealth {
     /**
      * The OK String. Marks a Status as OK.
      */
-    public static String HEALTH_OK = "OK";
+    public static final String HEALTH_OK = "OK";
 
     /**
      * The health Status. Use {@link PingdomHealth#HEALTH_OK} to indicate an OK
@@ -50,5 +50,13 @@ public class PingdomHealth {
     public PingdomHealth(String status, Double responseTime) {
         this.status = status;
         this.responseTime = FORMAT.format(Math.min(Math.max(0, responseTime), MAX_RESPONSE_TIME));
+    }
+
+    public String getResponseTime() {
+        return this.responseTime;
+    }
+
+    public String getStatus() {
+        return this.status;
     }
 }

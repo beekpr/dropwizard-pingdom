@@ -49,7 +49,7 @@ public class PingdomHealthResource {
         }
 
         if (severity == null || severity.isEmpty()) {
-            severity = Arrays.asList(HealthCheckDetails.Severity.VALUES);
+            severity = Arrays.asList(HealthCheckDetails.Severity.getValues());
         }
 
         String defaultCategory = configuration.getDefaultCategory();
@@ -78,11 +78,11 @@ public class PingdomHealthResource {
             Result result = healthCheck.getValue();
 
             Object resultSeverity = result.getDetails() != null
-                ? result.getDetails().get(HealthCheckDetails.Severity.KEY)
+                ? result.getDetails().get(HealthCheckDetails.Severity.getKey())
                 : null;
 
             Object resultCategory = result.getDetails() != null
-                ? result.getDetails().get(HealthCheckDetails.Category.KEY)
+                ? result.getDetails().get(HealthCheckDetails.Category.getKey())
                 : null;
 
             if (resultCategory == null) {
@@ -97,7 +97,6 @@ public class PingdomHealthResource {
             boolean categoryFilterMatches = (!filterByCategories
                 || resultCategory == null
                 || categories.contains(resultCategory));
-
 
             if (isUnhealthy && severityFilterMatches && categoryFilterMatches) {
                 String name = healthCheck.getKey();
