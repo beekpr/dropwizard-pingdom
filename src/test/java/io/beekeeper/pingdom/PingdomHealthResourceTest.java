@@ -1,17 +1,15 @@
 package io.beekeeper.pingdom;
 
-import java.util.ArrayList;
-
-import org.junit.Test;
-
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.health.HealthCheck;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import io.beekeeper.pingdom.resources.HealthCheckDetails;
 import io.beekeeper.pingdom.resources.PingdomHealthResource;
 import io.beekeeper.pingdom.resources.dto.PingdomHealth;
 import io.dropwizard.setup.Environment;
+import org.junit.Test;
+
+import java.util.ArrayList;
 
 import static org.junit.Assert.assertEquals;
 
@@ -39,7 +37,7 @@ public class PingdomHealthResourceTest {
             protected Result check() throws Exception {
                 return Result.builder()
                     .healthy()
-                    .withDetail(HealthCheckDetails.Severity.getKey(), HealthCheckDetails.Severity.getValueLow())
+                    .withDetail(HealthCheckDetails.Severity.KEY, HealthCheckDetails.Severity.VALUE_LOW)
                     .build();
             }
         });
@@ -55,10 +53,7 @@ public class PingdomHealthResourceTest {
         Environment target = env(new HealthCheck() {
             @Override
             protected Result check() throws Exception {
-                return Result.builder()
-                    .healthy()
-                    .withDetail(HealthCheckDetails.Category.getKey(), "someCategory")
-                    .build();
+                return Result.builder().healthy().withDetail(HealthCheckDetails.Category.KEY, "someCategory").build();
             }
         });
 
@@ -76,12 +71,12 @@ public class PingdomHealthResourceTest {
             protected Result check() throws Exception {
                 return Result.builder()
                     .unhealthy()
-                    .withDetail(HealthCheckDetails.Severity.getKey(), HealthCheckDetails.Severity.getValueLow())
+                    .withDetail(HealthCheckDetails.Severity.KEY, HealthCheckDetails.Severity.VALUE_LOW)
                     .build();
             }
         });
         ArrayList<String> targetQueryParams = new ArrayList<>();
-        targetQueryParams.add(HealthCheckDetails.Severity.getValueHigh());
+        targetQueryParams.add(HealthCheckDetails.Severity.VALUE_HIGH);
         PingdomHealthResource testObject = new PingdomHealthResource(aConfiguration(), target);
 
         PingdomHealth actual = testObject.get(null, targetQueryParams, null);
@@ -96,12 +91,12 @@ public class PingdomHealthResourceTest {
             protected Result check() throws Exception {
                 return Result.builder()
                     .unhealthy()
-                    .withDetail(HealthCheckDetails.Severity.getKey(), HealthCheckDetails.Severity.getValueHigh())
+                    .withDetail(HealthCheckDetails.Severity.KEY, HealthCheckDetails.Severity.VALUE_HIGH)
                     .build();
             }
         });
         ArrayList<String> targetQueryParams = new ArrayList<>();
-        targetQueryParams.add(HealthCheckDetails.Severity.getValueHigh());
+        targetQueryParams.add(HealthCheckDetails.Severity.VALUE_HIGH);
         PingdomHealthResource testObject = new PingdomHealthResource(aConfiguration(), target);
 
         PingdomHealth actual = testObject.get(null, targetQueryParams, null);
@@ -116,13 +111,13 @@ public class PingdomHealthResourceTest {
             protected Result check() throws Exception {
                 return Result.builder()
                     .unhealthy()
-                    .withDetail(HealthCheckDetails.Severity.getKey(), HealthCheckDetails.Severity.getValueHigh())
-                    .withDetail(HealthCheckDetails.Category.getKey(), "someCategory")
+                    .withDetail(HealthCheckDetails.Severity.KEY, HealthCheckDetails.Severity.VALUE_HIGH)
+                    .withDetail(HealthCheckDetails.Category.KEY, "someCategory")
                     .build();
             }
         });
         ArrayList<String> targetQueryParams = new ArrayList<>();
-        targetQueryParams.add(HealthCheckDetails.Severity.getValueHigh());
+        targetQueryParams.add(HealthCheckDetails.Severity.VALUE_HIGH);
         ArrayList<String> targetQueryParams2 = new ArrayList<>();
         targetQueryParams.add("someCategory");
         PingdomHealthResource testObject = new PingdomHealthResource(aConfiguration(), target);
@@ -140,13 +135,13 @@ public class PingdomHealthResourceTest {
             protected Result check() throws Exception {
                 return Result.builder()
                     .unhealthy()
-                    .withDetail(HealthCheckDetails.Severity.getKey(), HealthCheckDetails.Severity.getValueHigh())
-                    .withDetail(HealthCheckDetails.Category.getKey(), "someCategory")
+                    .withDetail(HealthCheckDetails.Severity.KEY, HealthCheckDetails.Severity.VALUE_HIGH)
+                    .withDetail(HealthCheckDetails.Category.KEY, "someCategory")
                     .build();
             }
         });
         ArrayList<String> targetQueryParams = new ArrayList<>();
-        targetQueryParams.add(HealthCheckDetails.Severity.getValueHigh());
+        targetQueryParams.add(HealthCheckDetails.Severity.VALUE_HIGH);
         ArrayList<String> targetQueryParams2 = new ArrayList<>();
         targetQueryParams2.add("someCategory");
         PingdomHealthResource testObject = new PingdomHealthResource(
@@ -167,13 +162,13 @@ public class PingdomHealthResourceTest {
             protected Result check() throws Exception {
                 return Result.builder()
                     .unhealthy()
-                    .withDetail(HealthCheckDetails.Severity.getKey(), HealthCheckDetails.Severity.getValueHigh())
-                    .withDetail(HealthCheckDetails.Category.getKey(), "defaultCategory")
+                    .withDetail(HealthCheckDetails.Severity.KEY, HealthCheckDetails.Severity.VALUE_HIGH)
+                    .withDetail(HealthCheckDetails.Category.KEY, "defaultCategory")
                     .build();
             }
         });
         ArrayList<String> targetQueryParams = new ArrayList<>();
-        targetQueryParams.add(HealthCheckDetails.Severity.getValueHigh());
+        targetQueryParams.add(HealthCheckDetails.Severity.VALUE_HIGH);
         PingdomHealthResource testObject = new PingdomHealthResource(
                 aConfigurationWithDefaultCategory("defaultCategory"),
                 target
@@ -189,10 +184,7 @@ public class PingdomHealthResourceTest {
         Environment target = env(new HealthCheck() {
             @Override
             protected Result check() throws Exception {
-                return Result.builder()
-                    .unhealthy()
-                    .withDetail(HealthCheckDetails.Category.getKey(), "someCategory")
-                    .build();
+                return Result.builder().unhealthy().withDetail(HealthCheckDetails.Category.KEY, "someCategory").build();
             }
         });
         ArrayList<String> targetQueryParams = new ArrayList<>();
@@ -231,7 +223,7 @@ public class PingdomHealthResourceTest {
             protected Result check() throws Exception {
                 return Result.builder()
                     .unhealthy()
-                    .withDetail(HealthCheckDetails.Category.getKey(), "defaultCategory")
+                    .withDetail(HealthCheckDetails.Category.KEY, "defaultCategory")
                     .build();
             }
         });
@@ -250,10 +242,7 @@ public class PingdomHealthResourceTest {
         Environment target = env(new HealthCheck() {
             @Override
             protected Result check() throws Exception {
-                return Result.builder()
-                    .unhealthy()
-                    .withDetail(HealthCheckDetails.Category.getKey(), "someCategory")
-                    .build();
+                return Result.builder().unhealthy().withDetail(HealthCheckDetails.Category.KEY, "someCategory").build();
             }
         });
         PingdomHealthResource testObject = new PingdomHealthResource(aConfiguration(), target);
@@ -268,10 +257,7 @@ public class PingdomHealthResourceTest {
         Environment target = env(new HealthCheck() {
             @Override
             protected Result check() throws Exception {
-                return Result.builder()
-                    .unhealthy()
-                    .withDetail(HealthCheckDetails.Category.getKey(), "someCategory")
-                    .build();
+                return Result.builder().unhealthy().withDetail(HealthCheckDetails.Category.KEY, "someCategory").build();
             }
         });
         ArrayList<String> targetQueryParams = new ArrayList<>();
@@ -290,13 +276,13 @@ public class PingdomHealthResourceTest {
             protected Result check() throws Exception {
                 return Result.builder()
                     .unhealthy()
-                    .withDetail(HealthCheckDetails.Category.getKey(), "someCategory")
-                    .withDetail(HealthCheckDetails.Severity.getKey(), HealthCheckDetails.Severity.getValueHigh())
+                    .withDetail(HealthCheckDetails.Category.KEY, "someCategory")
+                    .withDetail(HealthCheckDetails.Severity.KEY, HealthCheckDetails.Severity.VALUE_HIGH)
                     .build();
             }
         });
         ArrayList<String> targetQueryParams = new ArrayList<>();
-        targetQueryParams.add(HealthCheckDetails.Severity.getValueHigh());
+        targetQueryParams.add(HealthCheckDetails.Severity.VALUE_HIGH);
         ArrayList<String> targetQueryParams2 = new ArrayList<>();
         targetQueryParams2.add("someOtherCategory");
         PingdomHealthResource testObject = new PingdomHealthResource(aConfiguration(), target);
@@ -313,13 +299,13 @@ public class PingdomHealthResourceTest {
             protected Result check() throws Exception {
                 return Result.builder()
                     .unhealthy()
-                    .withDetail(HealthCheckDetails.Category.getKey(), "someCategory")
-                    .withDetail(HealthCheckDetails.Severity.getKey(), HealthCheckDetails.Severity.getValueLow())
+                    .withDetail(HealthCheckDetails.Category.KEY, "someCategory")
+                    .withDetail(HealthCheckDetails.Severity.KEY, HealthCheckDetails.Severity.VALUE_LOW)
                     .build();
             }
         });
         ArrayList<String> targetQueryParams = new ArrayList<>();
-        targetQueryParams.add(HealthCheckDetails.Severity.getValueHigh());
+        targetQueryParams.add(HealthCheckDetails.Severity.VALUE_HIGH);
         ArrayList<String> targetQueryParams2 = new ArrayList<>();
         targetQueryParams2.add("someCategory");
         PingdomHealthResource testObject = new PingdomHealthResource(aConfiguration(), target);
@@ -334,10 +320,7 @@ public class PingdomHealthResourceTest {
         Environment target = env(new HealthCheck() {
             @Override
             protected Result check() throws Exception {
-                return Result.builder()
-                    .unhealthy()
-                    .withDetail(HealthCheckDetails.Category.getKey(), "someCategory")
-                    .build();
+                return Result.builder().unhealthy().withDetail(HealthCheckDetails.Category.KEY, "someCategory").build();
             }
         });
         PingdomHealthResource testObject = new PingdomHealthResource(
@@ -357,12 +340,12 @@ public class PingdomHealthResourceTest {
             protected Result check() throws Exception {
                 return Result.builder()
                     .healthy()
-                    .withDetail(HealthCheckDetails.Severity.getKey(), HealthCheckDetails.Severity.getValueHigh())
+                    .withDetail(HealthCheckDetails.Severity.KEY, HealthCheckDetails.Severity.VALUE_HIGH)
                     .build();
             }
         });
         ArrayList<String> targetQueryParams = new ArrayList<>();
-        targetQueryParams.add(HealthCheckDetails.Severity.getValueHigh());
+        targetQueryParams.add(HealthCheckDetails.Severity.VALUE_HIGH);
         PingdomHealthResource testObject = new PingdomHealthResource(aConfiguration(), target);
 
         PingdomHealth actual = testObject.get(null, targetQueryParams, null);
@@ -389,7 +372,7 @@ public class PingdomHealthResourceTest {
             }
         });
         ArrayList<String> targetQueryParams = new ArrayList<>();
-        targetQueryParams.add(HealthCheckDetails.Severity.getValueHigh());
+        targetQueryParams.add(HealthCheckDetails.Severity.VALUE_HIGH);
         PingdomHealthResource testObject = new PingdomHealthResource(aConfiguration(), target);
 
         PingdomHealth actual = testObject.get(null, targetQueryParams, null);
@@ -404,7 +387,7 @@ public class PingdomHealthResourceTest {
             protected Result check() throws Exception {
                 return Result.builder()
                     .healthy()
-                    .withDetail(HealthCheckDetails.Severity.getKey(), HealthCheckDetails.Severity.getValueLow())
+                    .withDetail(HealthCheckDetails.Severity.KEY, HealthCheckDetails.Severity.VALUE_LOW)
                     .build();
             }
         }, new HealthCheck() {
@@ -412,7 +395,7 @@ public class PingdomHealthResourceTest {
             protected Result check() throws Exception {
                 return Result.builder()
                     .unhealthy()
-                    .withDetail(HealthCheckDetails.Severity.getKey(), HealthCheckDetails.Severity.getValueLow())
+                    .withDetail(HealthCheckDetails.Severity.KEY, HealthCheckDetails.Severity.VALUE_LOW)
                     .build();
             }
         }, new HealthCheck() {
@@ -420,7 +403,7 @@ public class PingdomHealthResourceTest {
             protected Result check() throws Exception {
                 return Result.builder()
                     .healthy()
-                    .withDetail(HealthCheckDetails.Severity.getKey(), HealthCheckDetails.Severity.getValueHigh())
+                    .withDetail(HealthCheckDetails.Severity.KEY, HealthCheckDetails.Severity.VALUE_HIGH)
                     .build();
             }
         }, new HealthCheck() {
@@ -428,12 +411,12 @@ public class PingdomHealthResourceTest {
             protected Result check() throws Exception {
                 return Result.builder()
                     .unhealthy()
-                    .withDetail(HealthCheckDetails.Severity.getKey(), HealthCheckDetails.Severity.getValueHigh())
+                    .withDetail(HealthCheckDetails.Severity.KEY, HealthCheckDetails.Severity.VALUE_HIGH)
                     .build();
             }
         });
         ArrayList<String> targetQueryParams = new ArrayList<>();
-        targetQueryParams.add(HealthCheckDetails.Severity.getValueHigh());
+        targetQueryParams.add(HealthCheckDetails.Severity.VALUE_HIGH);
         PingdomHealthResource testObject = new PingdomHealthResource(aConfiguration(), target);
 
         PingdomHealth actual = testObject.get(null, targetQueryParams, null);
@@ -448,7 +431,7 @@ public class PingdomHealthResourceTest {
             protected Result check() throws Exception {
                 return Result.builder()
                     .healthy()
-                    .withDetail(HealthCheckDetails.Severity.getKey(), HealthCheckDetails.Severity.getValueLow())
+                    .withDetail(HealthCheckDetails.Severity.KEY, HealthCheckDetails.Severity.VALUE_LOW)
                     .build();
             }
         }, new HealthCheck() {
@@ -456,7 +439,7 @@ public class PingdomHealthResourceTest {
             protected Result check() throws Exception {
                 return Result.builder()
                     .unhealthy()
-                    .withDetail(HealthCheckDetails.Severity.getKey(), HealthCheckDetails.Severity.getValueLow())
+                    .withDetail(HealthCheckDetails.Severity.KEY, HealthCheckDetails.Severity.VALUE_LOW)
                     .build();
             }
         }, new HealthCheck() {
@@ -464,7 +447,7 @@ public class PingdomHealthResourceTest {
             protected Result check() throws Exception {
                 return Result.builder()
                     .healthy()
-                    .withDetail(HealthCheckDetails.Severity.getKey(), HealthCheckDetails.Severity.getValueHigh())
+                    .withDetail(HealthCheckDetails.Severity.KEY, HealthCheckDetails.Severity.VALUE_HIGH)
                     .build();
             }
         }, new HealthCheck() {
@@ -472,13 +455,13 @@ public class PingdomHealthResourceTest {
             protected Result check() throws Exception {
                 return Result.builder()
                     .unhealthy()
-                    .withDetail(HealthCheckDetails.Severity.getKey(), HealthCheckDetails.Severity.getValueHigh())
+                    .withDetail(HealthCheckDetails.Severity.KEY, HealthCheckDetails.Severity.VALUE_HIGH)
                     .build();
             }
         });
         ArrayList<String> targetQueryParams = new ArrayList<>();
-        targetQueryParams.add(HealthCheckDetails.Severity.getValueHigh());
-        targetQueryParams.add(HealthCheckDetails.Severity.getValueLow());
+        targetQueryParams.add(HealthCheckDetails.Severity.VALUE_HIGH);
+        targetQueryParams.add(HealthCheckDetails.Severity.VALUE_LOW);
         PingdomHealthResource testObject = new PingdomHealthResource(aConfiguration(), target);
 
         PingdomHealth actual = testObject.get(null, targetQueryParams, null);
