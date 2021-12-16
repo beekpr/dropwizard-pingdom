@@ -1,0 +1,17 @@
+version: 2
+registries:
+  maven-repository-beekeeper-internal-repository-s3-eu-central-1-a:
+    type: maven-repository
+    url: http://beekeeper-internal-repository.s3.eu-central-1.amazonaws.com/maven2/release
+    username: AKIAYG4VANM6BNTAQTMN
+    password: "${{secrets.MAVEN_REPOSITORY_BEEKEEPER_INTERNAL_REPOSITORY_S3_EU_CENTRAL_1_A_PASSWORD}}"
+
+updates:
+- package-ecosystem: maven
+  directory: "/"
+  schedule:
+    interval: daily
+    time: "04:00"
+  open-pull-requests-limit: 10
+  registries:
+  - maven-repository-beekeeper-internal-repository-s3-eu-central-1-a
