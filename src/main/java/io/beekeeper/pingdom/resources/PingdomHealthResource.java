@@ -49,7 +49,7 @@ public class PingdomHealthResource {
         }
 
         if (severity == null || severity.isEmpty()) {
-            severity = Arrays.asList(HealthCheckDetails.Severity.VALUES);
+            severity = HealthCheckDetails.Severity.VALUES;
         }
 
         String defaultCategory = configuration.getDefaultCategory();
@@ -97,7 +97,6 @@ public class PingdomHealthResource {
             boolean categoryFilterMatches = (!filterByCategories
                 || resultCategory == null
                 || categories.contains(resultCategory));
-
 
             if (isUnhealthy && severityFilterMatches && categoryFilterMatches) {
                 String name = healthCheck.getKey();

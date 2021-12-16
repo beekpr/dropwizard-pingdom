@@ -1,12 +1,12 @@
 package io.beekeeper.pingdom;
 
-import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.health.HealthCheck;
-import com.fasterxml.jackson.databind.ObjectMapper;
+
 import io.beekeeper.pingdom.resources.HealthCheckDetails;
 import io.beekeeper.pingdom.resources.PingdomHealthResource;
 import io.beekeeper.pingdom.resources.dto.PingdomHealth;
 import io.dropwizard.setup.Environment;
+
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -477,13 +477,7 @@ public class PingdomHealthResourceTest {
     }
 
     public static Environment env(HealthCheck... checks) {
-        Environment environment = new Environment(
-                "Test Environment",
-                new ObjectMapper(),
-                null,
-                new MetricRegistry(),
-                PingdomHealthResourceTest.class.getClassLoader()
-        );
+        Environment environment = new Environment("Test Environment");
 
         int i = 0;
         for (HealthCheck healthCheck : checks) {
